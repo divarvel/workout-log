@@ -1,0 +1,26 @@
+{
+  "name": "workout-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "purescript": "^0.10.5",
+    "purs-loader": "^2.2.0",
+    "virtual-dom": "^2.1.1",
+    "webpack": "^1.14.0"
+  },
+  "devDependencies": {
+    "purescript-psa": "^0.4.0",
+    "webpack-dev-server": "^1.16.2"
+  },
+  "scripts": {
+    "webpack": "webpack",
+    "webpack:server": "webpack-dev-server --progress --inline --hot",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
