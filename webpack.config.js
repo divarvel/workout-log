@@ -6,7 +6,7 @@ module.exports = {
   devtool: 'eval-source-map',
 
   devServer: {
-    contentBase: '.',
+    contentBase: './public',
     port: 4009,
     stats: 'errors-only'
   },
@@ -14,7 +14,7 @@ module.exports = {
   entry: './src/Main.purs',
 
   output: {
-    path: __dirname,
+    path: __dirname + '/public',
     pathinfo: true,
     filename: 'bundle.js'
   },

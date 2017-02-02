@@ -4,4 +4,4 @@
 /output/
 /.psc*
 /.psa*
-bundle.js
+public/bundle.js
