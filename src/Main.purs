@@ -64,8 +64,7 @@ ui =
           [ HH.text "+" ]
       ]
   eval :: Query ~> H.ComponentDSL State Query Void m
-  eval = case _ of
-    AddWorkout next -> do
+  eval (AddWorkout next) = do
       H.modify addDefaultWorkout
       pure next
 
