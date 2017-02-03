@@ -3,30 +3,15 @@ module Main where
 import Prelude
 
 import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (log)
 import Control.Monad.Eff.Unsafe (unsafePerformEff)
-
+import Data.Maybe (Maybe(..))
 import Halogen as H
-import Halogen.HTML.Events.Indexed as HE
-import Halogen.HTML.Indexed as HH
-import Halogen.Util (awaitBody, runHalogenAff)
+import Halogen.HTML.Events as HE
+import Halogen.HTML as HH
+import Halogen.Aff as HA
+import Halogen.VDom.Driver (runUI)
 
-type Exercise = {
-    name :: String,
-    weight :: Number
-}
-
-type ExerciseResults = {
-    exercise :: Exercise,
-    results :: Array Int
-}
-
-type Workout = {
-    results :: Array ExerciseResults,
-    currentWeight :: Number
-}
-
-
+import Model (ExerciseResults, Workout)
 
 data Query a = AddWorkout a
 
@@ -46,15 +31,20 @@ initialState = { workouts: [ defaultWorkout, defaultWorkout, defaultWorkout ] }
 addDefaultWorkout :: State -> State
 addDefaultWorkout state = state { workouts = state.workouts <> [defaultWorkout] }
 
-ui :: forall g. H.Component State Query g
-ui = H.component { render, eval }
+ui :: forall m. H.Component HH.HTML Query Unit Void m
+ui =
+  H.component
+    { initialState: const initialState
+    , render
+    , eval
+    , receiver: const Nothing
+    }
   where
 
   renderResult :: ExerciseResults -> H.ComponentHTML Query
   renderResult result = HH.p_ [
     HH.text $ result.exercise.name <> " 5x5 " <> show result.exercise.weight
   ]
-
   renderWorkout :: Workout -> H.ComponentHTML Query
   renderWorkout workout =
     HH.div_ [
@@ -73,16 +63,16 @@ ui = H.component { render, eval }
       [ HE.onClick (HE.input_ AddWorkout)]
           [ HH.text "+" ]
       ]
+  eval :: Query ~> H.ComponentDSL State Query Void m
+  eval = case _ of
+    AddWorkout next -> do
+      H.modify addDefaultWorkout
+      pure next
 
-  eval :: Query ~> H.ComponentDSL State Query g
-  eval (AddWorkout next) = do
-    H.modify addDefaultWorkout
-    pure next
-
-launchHalogen :: Eff (H.HalogenEffects ()) Unit
-launchHalogen = runHalogenAff $ do
-    body <- awaitBody
-    H.runUI ui initialState body
+launchHalogen :: Eff (HA.HalogenEffects ()) Unit
+launchHalogen = HA.runHalogenAff $ do
+    body <- HA.awaitBody
+    runUI ui unit body
 
 main :: Unit
 main = unsafePerformEff $ do
