@@ -23,7 +23,7 @@
     "start": "node index.js",
     "bower": "bower",
     "webpack": "webpack",
-    "webpack:server": "webpack-dev-server --progress --inline --hot",
+    "webpack:server": "webpack-dev-server --inline --hot --progress --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
