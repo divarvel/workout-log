@@ -86,7 +86,7 @@ ui =
       (EditorSlot workout.id)
       (editor workout)
       unit
-      (const Nothing)
+      (HE.input (HandleEditorMessage workout.id))
 
   renderWorkoutList :: Array Workout -> ListComponentHTML m
   renderWorkoutList workouts =
@@ -105,7 +105,7 @@ ui =
   render state =
     case state.currentScreen of
       WorkoutList   -> renderWorkoutList state.workouts
-      EditWorkout w -> renderWorkout w
+      EditWorkout w -> renderWorkoutEditor w
   eval :: Query ~> ListComponentDSL m
   eval (AddWorkout next) = do
       H.modify addDefaultWorkout
